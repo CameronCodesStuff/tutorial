@@ -213,16 +213,46 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       padding: 0.6rem 0.9rem;
-      background: linear-gradient(transparent, rgba(0,0,0,0.8));
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.6);
       opacity: 0;
       transition: opacity 0.3s;
     }
 
     .gallery-item:hover .img-label { opacity: 1; }
+
+    /* card wrapper: image on top, caption below */
+    .gallery-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .gallery-caption {
+      padding: 0.75rem 0.6rem 0.5rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-top: none;
+    }
+
+    .gallery-caption .cap-filename {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+      word-break: break-all;
+    }
+
+    .gallery-caption .cap-desc {
+      font-size: 0.68rem;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.38);
+      font-style: italic;
+    }
 
     /* placeholder shimmer */
     .gallery-item .placeholder {
@@ -409,30 +439,52 @@
   })();
 
   /* ─── GALLERY SETUP ─── */
-  // Edit these filenames to match your actual images in the repo.
-  // By default they reference images/image1.jpg … images/image10.jpg
-  const IMAGES = Array.from({length: 10}, (_, i) => ({
-    src:   `images/image${i + 1}.jpg`,
-    label: `Image ${i + 1}`
-  }));
+  const IMAGES = [
+    { src: 'Screenshot 2026-05-12 153056.png', label: 'Screenshot 2026-05-12 153056', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153134.png', label: 'Screenshot 2026-05-12 153134', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153208.png', label: 'Screenshot 2026-05-12 153208', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153319.png', label: 'Screenshot 2026-05-12 153319', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153355.png', label: 'Screenshot 2026-05-12 153355', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153418.png', label: 'Screenshot 2026-05-12 153418', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153456.png', label: 'Screenshot 2026-05-12 153456', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153523.png', label: 'Screenshot 2026-05-12 153523', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153552.png', label: 'Screenshot 2026-05-12 153552', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153622.png', label: 'Screenshot 2026-05-12 153622', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153646.png', label: 'Screenshot 2026-05-12 153646', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153711.png', label: 'Screenshot 2026-05-12 153711', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153732.png', label: 'Screenshot 2026-05-12 153732', desc: 'Your description here.' },
+    { src: 'Screenshot 2026-05-12 153758.png', label: 'Screenshot 2026-05-12 153758', desc: 'Your description here.' },
+  ];
 
   function buildGallery() {
     const grid = document.getElementById('gallery-grid');
     grid.innerHTML = '';
-    IMAGES.forEach((img, idx) => {
+    IMAGES.forEach((img) => {
+      const card = document.createElement('div');
+      card.className = 'gallery-card';
+
       const item = document.createElement('div');
       item.className = 'gallery-item';
       item.innerHTML = `
         <div class="placeholder">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          ${img.label}
+          Loading…
         </div>
         <img src="${img.src}" alt="${img.label}"
              onerror="this.style.display='none'"
              onload="this.previousElementSibling.style.display='none'" />
         <span class="img-label">${img.label}</span>`;
       item.addEventListener('click', () => openLightbox(img.src, img.label));
-      grid.appendChild(item);
+
+      const caption = document.createElement('div');
+      caption.className = 'gallery-caption';
+      caption.innerHTML = `
+        <div class="cap-filename">${img.label}</div>
+        <div class="cap-desc">${img.desc}</div>`;
+
+      card.appendChild(item);
+      card.appendChild(caption);
+      grid.appendChild(card);
     });
   }
   buildGallery();
